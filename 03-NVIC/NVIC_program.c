@@ -43,13 +43,13 @@ u8 MNVIC_EnableIRQ(u8 Interrupt_Number)
 	
 	else if (Interrupt_Number >=32 && Interrupt_Number<=63)
 	{
-		NVIC_ISEN->NVIC_ISER1 |= 1<<Interrupt_Number;
+		NVIC_ISEN->NVIC_ISER1 |= 1<<Interrupt_Number - 32;
 		
 	}
 	
 	else if (Interrupt_Number>=64 && Interrupt_Number <=95)
 	{   
-	    NVIC_ISEN->NVIC_ISER2 |= 1<<Interrupt_Number;
+	    NVIC_ISEN->NVIC_ISER2 |= 1<<Interrupt_Number - 64 ;
 	}
 	
 	else
@@ -75,13 +75,13 @@ u8 MNVIC_DisableIRQ(u8 Interrupt_Number)
 	
 	else if (Interrupt_Number >=32 && Interrupt_Number<=63)
 	{
-		NVIC_ICEN->NVIC_ICER1 |= (1<<Interrupt_Number);
+		NVIC_ICEN->NVIC_ICER1 |= (1<<Interrupt_Number - 32);
 		
 	}
 	
 	else if (Interrupt_Number>=64 && Interrupt_Number <=95)
 	{   
-		NVIC_ICEN->NVIC_ICER2 |= (1<<Interrupt_Number);
+		NVIC_ICEN->NVIC_ICER2 |= (1<<Interrupt_Number - 64);
 	}
 	
 	else
@@ -108,13 +108,13 @@ u8 MNVIC_EnablePendingIRQ(u8 Interrupt_Number)
 	
 	else if (Interrupt_Number >=32 && Interrupt_Number<=63)
 	{
-		NVIC_ISPRN->NVIC_ISPR1 |= (1<<Interrupt_Number);
+		NVIC_ISPRN->NVIC_ISPR1 |= (1<<Interrupt_Number - 32);
 		
 	}
 	
 	else if (Interrupt_Number>=64 && Interrupt_Number <=95)
 	{   
-		NVIC_ISPRN->NVIC_ISPR2 |= (1<<Interrupt_Number);
+		NVIC_ISPRN->NVIC_ISPR2 |= (1<<Interrupt_Number - 64);
 	}
 	
 	else
@@ -141,13 +141,13 @@ u8 MNVIC_DisablePendingIRQ(u8 Interrupt_Number)
 	
 	else if (Interrupt_Number >=32 && Interrupt_Number<=63)
 	{
-		NVIC_ICPRN->NVIC_ICPR1 |= (1<<Interrupt_Number);
+		NVIC_ICPRN->NVIC_ICPR1 |= (1<<Interrupt_Number - 32);
 		
 	}
 	
 	else if (Interrupt_Number>=64 && Interrupt_Number <=95)
 	{   
-		NVIC_ICPRN->NVIC_ICPR2 |= (1<<Interrupt_Number);
+		NVIC_ICPRN->NVIC_ICPR2 |= (1<<Interrupt_Number - 64);
 	}
 	
 	else
@@ -173,12 +173,12 @@ u8 MNVIC_GetPendingIRQ(u8 Interrupt_Number , u8 *Interrupt_Status)
 	
 	else if (Interrupt_Number >=32 && Interrupt_Number<=63)
 	{
-	    *Interrupt_Status = GET_BIT(NVIC_ICPRN->NVIC_ICPR1,Interrupt_Number);  	
+	    *Interrupt_Status = GET_BIT(NVIC_ICPRN->NVIC_ICPR1,Interrupt_Number - 32);  	
 	}
 	
 	else if (Interrupt_Number>=64 && Interrupt_Number <=95)
 	{
-		*Interrupt_Status = GET_BIT(NVIC_ICPRN->NVIC_ICPR2,Interrupt_Number);  
+		*Interrupt_Status = GET_BIT(NVIC_ICPRN->NVIC_ICPR2,Interrupt_Number - 64);  
 	}
 	
 	else
@@ -206,13 +206,13 @@ u8 MNVIC_ReadInterruptStatus(u8 Interrupt_Number , u8 *Interrupt_Status)
 	
 	else if (Interrupt_Number >=32 && Interrupt_Number<=63)
 	{
-		*Interrupt_Status = GET_BIT( NVIC_IABRN->NVIC_IABR1,Interrupt_Number);
+		*Interrupt_Status = GET_BIT( NVIC_IABRN->NVIC_IABR1,Interrupt_Number - 32 );
 		
 	}
 	
 	else if (Interrupt_Number>=64 && Interrupt_Number <=95)
 	{   
-		*Interrupt_Status = GET_BIT( NVIC_IABRN ->NVIC_IABR2,Interrupt_Number);
+		*Interrupt_Status = GET_BIT( NVIC_IABRN ->NVIC_IABR2,Interrupt_Number - 64 );
 	}
 	
 	else
@@ -324,7 +324,7 @@ u8 MNVIC_TriggerInterrupt(u8 Interrupt_Number)
    
    if(Interrupt_Number <= 84 )
    {  
-	 NVIC_STIRN   =  Interrupt_Number  ;
+	  NVIC_STIRN   =  Interrupt_Number  ;
    }
    
    return status;

@@ -59,8 +59,8 @@ USART_STATUS usart_init(USART_NAME usart)
 		       //Enable Pins Needed for USART
 		       MGPIO_vSetPinMode(PORTA,PIN_9,ALT_F);  //TX
 		       MGPIO_vSetPinMode(PORTA,PIN_10,ALT_F); //RX
-		       MGPIO_vSetPinOutputType(PORTA,PIN_9,PUSH_PULL);
-		       MGPIO_vSetPinInputType(PORTA,PIN_10,NO_PULL); 
+           MGPIO_vSetAltPin(PORTA,PIN_9,AF7);
+           MGPIO_vSetAltPin(PORTA,PIN_10,AF7);
 
 		break;
 		
@@ -72,9 +72,8 @@ USART_STATUS usart_init(USART_NAME usart)
 		       //Enable Pins Needed for USART
 		       MGPIO_vSetPinMode(PORTA,PIN_2,ALT_F);  //TX
 		       MGPIO_vSetPinMode(PORTA,PIN_3,ALT_F); //RX
-		       MGPIO_vSetPinOutputType(PORTA,PIN_2,PUSH_PULL);
-		       MGPIO_vSetPinInputType(PORTA,PIN_3,NO_PULL); 
-
+           MGPIO_vSetAltPin(PORTA,PIN_2,AF7);
+           MGPIO_vSetAltPin(PORTA,PIN_3,AF7);
 		       
 		break;
 		
@@ -87,9 +86,8 @@ USART_STATUS usart_init(USART_NAME usart)
 		       //Enable Pins Needed for USART
 		       MGPIO_vSetPinMode(PORTC,PIN_6,ALT_F);  //TX
 		       MGPIO_vSetPinMode(PORTC,PIN_7,ALT_F); //RX
-		       MGPIO_vSetPinOutputType(PORTC,PIN_6,PUSH_PULL);
-		       MGPIO_vSetPinInputType(PORTC,PIN_7,NO_PULL); 
-
+           MGPIO_vSetAltPin(PORTC,PIN_6,AF8);
+           MGPIO_vSetAltPin(PORTC,PIN_7,AF8);
 		break;
 		
 		default: Status = USART_NOK;
@@ -178,8 +176,8 @@ USART_STATUS usart_set_baudrate( USART_NAME usart, u32 baudRate)
 	USART_STATUS Status = USART_OK;
 	u32 Decimal_1;
 	f64 Decimal_2;
-	u32 Div  = 36000000;
-	f64 Frac = 36000000.00; 
+	u32 Div  = 42000000;
+	f64 Frac = 42000000.00; 
 	
 	
 	
@@ -207,8 +205,8 @@ USART_STATUS usart_set_baudrate( USART_NAME usart, u32 baudRate)
 		break;
 					
 		case USART_2: 
-				Div  = 36000000;	
-		    Frac = 36000000.00;
+				Div  = 42000000;	
+		    Frac = 42000000.00;
 		    Div  = Div / ( baudRate * 16);
 		    Frac = 16*((Frac /(baudRate*16))-Div);
         Decimal_1 = (u32)Frac;
@@ -472,18 +470,21 @@ USART_STATUS usart_send_Sync(USART_NAME usart, u8 data)
 		switch(usart)
 		{
 			case USART_1: 
-					while( GET_BIT(MUSART_1->SR , 6) == 0 );
 					MUSART_1->DR = data;
+					while( GET_BIT(MUSART_1->SR , 6) == 0 );
+			
 			break;
 			
 			case USART_2: 
-					while( GET_BIT(MUSART_2->SR , 6) == 0 );
-					MUSART_1->DR = data;
+			   		MUSART_1->DR = data;
+						while( GET_BIT(MUSART_2->SR , 6) == 0 );
+			
 			break;
 			
 			case USART_6: 
-					while( GET_BIT(MUSART_6->SR , 6) == 0 );
 					MUSART_1->DR = data;
+					while( GET_BIT(MUSART_6->SR , 6) == 0 );
+			
 			break;
 			
 			default: Status = USART_NOK;
